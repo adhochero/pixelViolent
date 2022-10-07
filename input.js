@@ -28,5 +28,10 @@ export class Input{
                 y: ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height,
             }
         }
+
+        window.addEventListener('click', e =>{
+            this.game.player.pushback = this.game.player.pushbackAmount;
+            this.game.player.shoot();
+        })
     }
 }
