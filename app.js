@@ -1,5 +1,6 @@
 import { Player } from './player.js';
 import { Input } from './input.js';
+import { Enemy } from './enemy.js';
 
 window.addEventListener('load', function(){
     //canvas setup
@@ -19,20 +20,34 @@ window.addEventListener('load', function(){
             this.mouseY = 0;
             this.timer = 0;
             this.interval = 1000;
+            this.enemies = [];
         }
 
         update(deltaTime){
             this.player.update();
+
             if(this.timer > this.interval){
-                console.log('seconds timer')
+                this.addEnemy();
                 this.timer = 0;
             }else{
                 this.timer += deltaTime;
             }
+
+            this.enemies.forEach(enemy => {
+                enemy.update();
+            });
+            this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
         }
 
         draw(context){
             this.player.draw(context);
+            this.enemies.forEach(enemy => {
+                enemy.draw(context);
+            });
+        }
+
+        addEnemy(){
+            this.enemies.push(new Enemy(this))
         }
     }
 

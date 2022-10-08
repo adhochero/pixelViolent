@@ -29,7 +29,7 @@ export class Input{
             }
         }
 
-        window.addEventListener('click', e =>{
+        window.addEventListener('mousedown', e =>{
             this.game.player.pushback = this.game.player.pushbackAmount;
             this.game.player.shoot();
         })

@@ -15,7 +15,11 @@ export class Projectile{
         this.xPos -= Math.cos(this.angle) * this.speed;
         this.yPos -= Math.sin(this.angle) * this.speed;
         
-        if(this.yPos < 0) this.markedForDeletion = true;
+        if(this.yPos < 0 ||
+            this.yPos > this.game.height ||
+            this.xPos < 0 ||
+            this.xPos > this.game.width
+            ) this.markedForDeletion = true;
     }
 
     draw(context){
