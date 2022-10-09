@@ -1,6 +1,7 @@
 import { Player } from './player.js';
 import { Input } from './input.js';
 import { Enemy } from './enemy.js';
+import { UI } from './ui.js';
 
 window.addEventListener('load', function(){
     //canvas setup
@@ -15,12 +16,14 @@ window.addEventListener('load', function(){
             this.height = height;
             this.player = new Player(this);
             this.input = new Input(this);
+            this.ui = new UI(this);
             this.keys = [];
             this.mouseX = 0;
             this.mouseY = 0;
             this.timer = 0;
             this.interval = 1000;
             this.enemies = [];
+            this.score = 0;
         }
 
         update(deltaTime){
@@ -52,6 +55,7 @@ window.addEventListener('load', function(){
                         enemy.lives--;
                         if(enemy.lives <= 0){
                             enemy.markedForDeletion = true;
+                            this.score++;
                         }
                     }
                 })
@@ -64,6 +68,7 @@ window.addEventListener('load', function(){
             this.enemies.forEach(enemy => {
                 enemy.draw(context);
             });
+            this.ui.draw(context);
         }
 
         addEnemy(){
