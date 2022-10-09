@@ -22,9 +22,8 @@ export class Enemy{
             this.xPos = 0 - this.width;
             this.yPos = this.randomPoint - (this.game.width * 2 + this.game.height);
         }
-        this.xPos -= this.width * 0.5;
-        this.yPos -= this.height * 0.5;
         this.speed = 1;
+        this.lives = 3;
         this.markedForDeletion = false;
     }
 
@@ -41,6 +40,11 @@ export class Enemy{
 
     draw(context){
         context.imageSmoothingEnabled = false;
-        context.drawImage(this.image, this.xPos, this.yPos, this.width, this.height);
+        context.drawImage(this.image, this.xPos - this.width * 0.5, this.yPos - this.height * 0.5, this.width, this.height);
+        
+        //lives
+        context.fillStyle = 'grey';
+        context.font = '20px Helvetica';
+        context.fillText(this.lives, this.xPos - 14, this.yPos + 4);
     }
 }

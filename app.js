@@ -35,6 +35,26 @@ window.addEventListener('load', function(){
 
             this.enemies.forEach(enemy => {
                 enemy.update();
+                if(this.checkCircleCollision(this.player, enemy)){
+                    enemy.markedForDeletion = true;
+                    this.player.lives--;
+                    if(this.player.lives <= 0){
+                        this.player.lives = 0;
+                        setTimeout(()=>{
+                            alert('GAME OVER!');
+                            window.location.reload();
+                        }, 250)
+                    }
+                }
+                this.player.projectiles.forEach(projectile => {
+                    if(this.checkCircleCollision(projectile, enemy)){
+                        projectile.markedForDeletion = true;
+                        enemy.lives--;
+                        if(enemy.lives <= 0){
+                            enemy.markedForDeletion = true;
+                        }
+                    }
+                })
             });
             this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
         }
@@ -47,7 +67,18 @@ window.addEventListener('load', function(){
         }
 
         addEnemy(){
-            this.enemies.push(new Enemy(this))
+            this.enemies.push(new Enemy(this));
+        }
+
+        checkCircleCollision(cir1, cir2){
+            let xDistance = cir1.xPos - cir2.xPos;
+            let yDistance = cir1.yPos - cir2.yPos;
+            let radiusSum = cir1.width * 0.5 + cir2.width * 0.5;
+
+            if(xDistance * xDistance + yDistance * yDistance <= radiusSum * radiusSum){
+                return true;
+            }
+            return false;
         }
     }
 

@@ -7,16 +7,17 @@ export class Player{
         this.scale = 4;
         this.width = 12 * this.scale;
         this.height = 12 * this.scale;
-        this.xPos = this.game.width * 0.5 - this.width * 0.5;
-        this.yPos = this.game.height * 0.5 - this.height * 0.5;
+        this.xPos = this.game.width * 0.5;
+        this.yPos = this.game.height * 0.5;
         this.xDir = 0;
         this.yDir = 0;
         this.maxSpeed = 4;
         this.toMouseAngle = 0;
-        this.pushbackAmount = 8;
+        this.pushbackAmount = 6;
         this.pushback = 0;
         this.weight = 1;
         this.projectiles = [];
+        this.lives = 9;
     }
 
     update(){
@@ -39,8 +40,8 @@ export class Player{
         this.yPos += this.yDir * this.maxSpeed;
 
         //pushback
-        let dx = this.xPos - this.game.mouseX + this.width * 0.5;
-        let dy = this.yPos - this.game.mouseY + this.height * 0.5;
+        let dx = this.xPos - this.game.mouseX;
+        let dy = this.yPos - this.game.mouseY;
 
         let angle = Math.atan2(dy, dx);
         this.toMouseAngle = angle;
@@ -60,15 +61,20 @@ export class Player{
 
     draw(context){
         context.imageSmoothingEnabled = false;
-        context.drawImage(this.image, this.xPos, this.yPos, this.width, this.height);
+        context.drawImage(this.image, this.xPos - this.width * 0.5, this.yPos - this.height * 0.5, this.width, this.height);
         
         //projectiles
         this.projectiles.forEach(projctile => {
             projctile.draw(context);
         });
+
+        //lives
+        context.fillStyle = 'grey';
+        context.font = '20px Helvetica';
+        context.fillText(this.lives, this.xPos - 14, this.yPos + 4);
     }
 
     shoot(){
-        this.projectiles.push(new Projectile(this.game, this.xPos + this.width * 0.5, this.yPos + this.height * 0.5));
+        this.projectiles.push(new Projectile(this.game, this.xPos, this.yPos));
     }
 }

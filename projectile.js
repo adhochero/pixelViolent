@@ -11,7 +11,6 @@ export class Projectile{
     }
 
     update(){
-
         this.xPos -= Math.cos(this.angle) * this.speed;
         this.yPos -= Math.sin(this.angle) * this.speed;
         
@@ -23,6 +22,7 @@ export class Projectile{
     }
 
     draw(context){
-        context.fillRect(this.xPos, this.yPos, this.width, this.height);
+        context.fillStyle = 'black';
+        context.fillRect(this.xPos  - this.width * 0.5, this.yPos - this.height * 0.5, this.width, this.height);
     }
 }
