@@ -37,7 +37,7 @@ window.addEventListener('load', function(){
             }
 
             this.enemies.forEach(enemy => {
-                enemy.update();
+                enemy.update(deltaTime);
                 if(this.checkCircleCollision(this.player, enemy)){
                     enemy.markedForDeletion = true;
                     this.player.lives--;
@@ -53,6 +53,9 @@ window.addEventListener('load', function(){
                     if(this.checkCircleCollision(projectile, enemy)){
                         projectile.markedForDeletion = true;
                         enemy.lives--;
+                        enemy.pushAngle = projectile.angle;
+                        enemy.pushback = enemy.pushbackAmount;
+                        enemy.pushTimer = 0;
                         if(enemy.lives <= 0){
                             enemy.markedForDeletion = true;
                             this.score++;

@@ -47,12 +47,12 @@ export class Player{
         let angle = Math.atan2(dy, dx);
         this.toMouseAngle = angle;
 
-        this.xPos += Math.cos(angle) * this.pushback;
-        this.yPos += Math.sin(angle) * this.pushback;
-
         if(this.pushback > 0){ 
             this.pushTimer += this.pushInterval * deltaTime/1000;
             this.pushback = this.lerp(this.pushbackAmount, 0, this.pushTimer);
+
+            this.xPos += Math.cos(angle) * this.pushback;
+            this.yPos += Math.sin(angle) * this.pushback;
         }
         else {
             this.pushTimer = 0;

@@ -24,18 +24,36 @@ export class Enemy{
         }
         this.speed = 1;
         this.lives = 3;
+        this.pushAngle;
+        this.pushbackAmount = 4; //amount of force
+        this.pushback = 0;
+        this.pushTimer = 0;
+        this.pushInterval = 4; //recovery speed
         this.markedForDeletion = false;
     }
 
-    update(){
+    update(deltaTime){
         let dx = this.game.player.xPos - this.xPos;
         let dy = this.game.player.yPos - this.yPos;
 
         let angle = Math.atan2(dy, dx);
-        this.toMouseAngle = angle;
 
         this.xPos += Math.cos(angle) * this.speed;
         this.yPos += Math.sin(angle) * this.speed;
+        
+        //pushback
+        if(this.pushback > 0){ 
+            this.pushTimer += this.pushInterval * deltaTime/1000;
+            this.pushback = this.lerp(this.pushbackAmount, 0, this.pushTimer);
+
+            this.xPos -= Math.cos(this.pushAngle) * this.pushback;
+            this.yPos -= Math.sin(this.pushAngle) * this.pushback;
+        }
+        else {
+            this.pushTimer = 0;
+            this.pushback = 0;
+        }
+
     }
 
     draw(context){
@@ -46,5 +64,9 @@ export class Enemy{
         context.fillStyle = 'grey';
         context.font = '20px Helvetica';
         context.fillText(this.lives, this.xPos - 14, this.yPos + 4);
+    }
+    
+    lerp(start, end, t){
+        return  (1 - t) * start + end * t;
     }
 }
