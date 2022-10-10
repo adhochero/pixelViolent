@@ -13,14 +13,15 @@ export class Player{
         this.yDir = 0;
         this.maxSpeed = 4;
         this.toMouseAngle = 0;
-        this.pushbackAmount = 6;
+        this.pushbackAmount = 4; //amount of force
         this.pushback = 0;
-        this.weight = 1;
+        this.pushTimer = 0;
+        this.pushInterval = 4; //recovery speed
         this.projectiles = [];
         this.lives = 9;
     }
 
-    update(){
+    update(deltaTime){
         //input movement
         if(this.game.keys.includes('a') && !this.game.keys.includes('d')) this.xDir = -1;
         else if(this.game.keys.includes('d') && !this.game.keys.includes('a')) this.xDir = 1;
@@ -49,8 +50,14 @@ export class Player{
         this.xPos += Math.cos(angle) * this.pushback;
         this.yPos += Math.sin(angle) * this.pushback;
 
-        if(this.pushback > 0) this.pushback -= this.weight;
-        else this.pushback = 0;
+        if(this.pushback > 0){ 
+            this.pushTimer += this.pushInterval * deltaTime/1000;
+            this.pushback = this.lerp(this.pushbackAmount, 0, this.pushTimer);
+        }
+        else {
+            this.pushTimer = 0;
+            this.pushback = 0;
+        }
 
         //projectiles
         this.projectiles.forEach(projctile => {
@@ -72,6 +79,10 @@ export class Player{
         context.fillStyle = 'grey';
         context.font = '20px Helvetica';
         context.fillText(this.lives, this.xPos - 14, this.yPos + 4);
+    }
+
+    lerp(start, end, t){
+        return  (1 - t) * start + end * t;
     }
 
     shoot(){

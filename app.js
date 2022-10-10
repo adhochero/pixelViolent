@@ -27,7 +27,7 @@ window.addEventListener('load', function(){
         }
 
         update(deltaTime){
-            this.player.update();
+            this.player.update(deltaTime);
 
             if(this.timer > this.interval){
                 this.addEnemy();
