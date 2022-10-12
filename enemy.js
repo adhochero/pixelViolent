@@ -22,7 +22,9 @@ export class Enemy{
             this.xPos = 0 - this.width;
             this.yPos = this.randomPoint - (this.game.width * 2 + this.game.height);
         }
-        this.speed = 1;
+        this.xPos += this.game.player.xPos - this.game.width / 2;
+        this.yPos += this.game.player.yPos - this.game.height / 2;
+        this.speed = 3;
         this.lives = 3;
         this.pushAngle;
         this.pushbackAmount = 4; //amount of force

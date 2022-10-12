@@ -41,8 +41,8 @@ export class Player{
         this.yPos += this.yDir * this.maxSpeed;
 
         //pushback
-        let dx = this.xPos - this.game.mouseX;
-        let dy = this.yPos - this.game.mouseY;
+        let dx = this.game.width / 2 - this.game.mouseX;
+        let dy = this.game.height / 2 - this.game.mouseY;
 
         let angle = Math.atan2(dy, dx);
         this.toMouseAngle = angle;

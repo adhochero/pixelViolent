@@ -14,10 +14,10 @@ export class Projectile{
         this.xPos -= Math.cos(this.angle) * this.speed;
         this.yPos -= Math.sin(this.angle) * this.speed;
         
-        if(this.yPos < 0 ||
-            this.yPos > this.game.height ||
-            this.xPos < 0 ||
-            this.xPos > this.game.width
+        if(this.yPos < this.game.player.yPos - this.game.height / 2||
+            this.yPos > this.game.player.yPos + this.game.height / 2 ||
+            this.xPos < this.game.player.xPos - this.game.width / 2 ||
+            this.xPos > this.game.player.xPos + this.game.width / 2
             ) this.markedForDeletion = true;
     }
 

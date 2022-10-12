@@ -24,6 +24,9 @@ window.addEventListener('load', function(){
             this.interval = 1000;
             this.enemies = [];
             this.score = 0;
+            this.followX = this.width / 2;
+            this.followY = this.height / 2;
+            this.followSpeed = 0.1;
         }
 
         update(deltaTime){
@@ -67,10 +70,16 @@ window.addEventListener('load', function(){
         }
 
         draw(context){
+            this.followX = this.lerp(this.followX, -this.player.xPos + this.width / 2, this.followSpeed);
+            this.followY = this.lerp(this.followY, -this.player.yPos + this.height / 2, this.followSpeed);
+
+            context.save();
+            context.translate(this.followX, this.followY);
             this.player.draw(context);
             this.enemies.forEach(enemy => {
                 enemy.draw(context);
             });
+            context.restore();
             this.ui.draw(context);
         }
 
@@ -87,6 +96,10 @@ window.addEventListener('load', function(){
                 return true;
             }
             return false;
+        }
+
+        lerp(start, end, t){
+            return  (1 - t) * start + end * t;
         }
     }
 
