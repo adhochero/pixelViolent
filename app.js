@@ -24,8 +24,8 @@ window.addEventListener('load', function(){
             this.interval = 1000;
             this.enemies = [];
             this.score = 0;
-            this.followX = this.width / 2;
-            this.followY = this.height / 2;
+            this.followX = -this.player.xPos + this.width / 2;
+            this.followY = -this.player.yPos + this.height / 2;
             this.followSpeed = 0.1;
         }
 
