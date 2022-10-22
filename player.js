@@ -4,9 +4,9 @@ export class Player{
     constructor(game){
         this.game = game;
         this.image = document.getElementById('sphere');
-        this.scale = 4;
-        this.width = 12 * this.scale;
-        this.height = 12 * this.scale;
+        this.scale = 3;
+        this.width = this.image.width * this.scale;
+        this.height = this.image.height * this.scale;
         this.xPos = this.game.width * 0.5;
         this.yPos = this.game.height * 0.5;
         this.xDir = 0;
@@ -40,7 +40,7 @@ export class Player{
         this.xPos += this.xDir * this.maxSpeed;
         this.yPos += this.yDir * this.maxSpeed;
 
-        //pushback
+        //pushback //TODO fix angle to be compounded and set on call
         let dx = this.game.width / 2 - this.game.mouseX;
         let dy = this.game.height / 2 - this.game.mouseY;
 
@@ -81,11 +81,11 @@ export class Player{
         context.fillText(this.lives, this.xPos - 14, this.yPos + 4);
     }
 
-    lerp(start, end, t){
-        return  (1 - t) * start + end * t;
-    }
-
     shoot(){
         this.projectiles.push(new Projectile(this.game, this.xPos, this.yPos));
+    }
+
+    lerp(start, end, t){
+        return  (1 - t) * start + end * t;
     }
 }

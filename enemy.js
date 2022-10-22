@@ -40,6 +40,7 @@ export class Enemy{
 
         let angle = Math.atan2(dy, dx);
 
+        //move to follow
         this.xPos += Math.cos(angle) * this.speed;
         this.yPos += Math.sin(angle) * this.speed;
         

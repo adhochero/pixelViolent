@@ -30,9 +30,7 @@ export class Input{
         }
 
         window.addEventListener('mousedown', e =>{
-            this.game.player.pushback = this.game.player.pushbackAmount;
-            this.game.player.pushTimer = 0;
-            this.game.player.shoot();
+            this.game.myEntity.shoot();
         })
     }
 }
