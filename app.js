@@ -47,26 +47,52 @@ window.addEventListener('load', function(){
             this.entities.forEach(entity => {
                 entity.update(deltaTime);
 
-                //testing wall collision
-                this.environment.walls.forEach(wall => {
-                    if(this.checkCircleToRectCollision(entity, wall)){
-                        //entity.markedForDeletion = true;
+                //entities collision
+                this.entities.forEach(otherEntity => {
+                    if(entity === otherEntity) return;
+                    if(this.checkCircleCollision(otherEntity, entity)){
+                        let normal = {
+                            x: (entity.positionX - otherEntity.positionX),
+                            y: (entity.positionY - otherEntity.positionY)
+                        };
+                        entity.initilizePush(otherEntity.moveSpeed, normal.x, normal.y);
                     }
                 });
 
-                if(!entity.isMine){
-                    if(this.checkCircleCollision(this.myEntity, entity)){
-                        entity.markedForDeletion = true;
-                        this.myEntity.lives--;
-                        if(this.myEntity.lives <= 0){
-                            this.myEntity.lives = 0;
-                            // setTimeout(()=>{
-                            //     //alert('GAME OVER!');
-                            //     window.location.reload();
-                            // }, 200)
-                        }
+                this.environment.walls.forEach(wall => {
+                    //testing wall collision
+                    if(this.checkCircleToRectCollision(entity, wall)){
+                        // let velocityX = entity.inputSmoothingX * entity.moveSpeed;
+                        // let velocityY = entity.inputSmoothingY * entity.moveSpeed;
+
+                        // if(entity.positionX + velocityX > wall.positionX + wall.width * 0.5 ||
+                        //     entity.positionX + velocityX < wall.positionX - wall.width * 0.5){
+                        //     velocityX = -velocityX;
+                        // }
+                        // if(entity.positionY + velocityY > wall.positionY + wall.height * 0.5 ||
+                        //     entity.positionY + velocityY < wall.positionY - wall.height * 0.5){
+                        //     velocityY = -velocityY;
+                        // }
+
+                        // entity.positionX += velocityX;
+                        // entity.positionY += velocityY;
+
+                        let normal = {
+                            x: (entity.positionX - wall.positionX),
+                            y: (entity.positionY - wall.positionY)
+                        };
+                        entity.initilizePush(entity.moveSpeed, normal.x, normal.y);
                     }
 
+                    //detroy projectiles on wall collision
+                    entity.projectiles.forEach(projectile => {
+                        if(this.checkCircleToRectCollision(projectile, wall)){
+                            projectile.markedForDeletion = true;
+                        }
+                    })
+                });
+
+                if(!entity.isMine){
                     this.myEntity.projectiles.forEach(projectile => {
                         if(this.checkCircleCollision(projectile, entity)){
                             projectile.markedForDeletion = true;
@@ -81,35 +107,6 @@ window.addEventListener('load', function(){
                 }
             });
             this.entities = this.entities.filter(entity => !entity.markedForDeletion);
-
-            this.environment.walls.forEach(wall => {
-                if(this.checkCircleToRectCollision(this.myEntity, wall)){
-                    //this kinda works
-                    //stops penetration, but sticks on corners.
-                    let velocityX = this.myEntity.inputSmoothingX * this.myEntity.moveSpeed;
-                    let velocityY = this.myEntity.inputSmoothingY * this.myEntity.moveSpeed;
-
-                    if(this.myEntity.positionX + velocityX > wall.positionX + wall.width * 0.5 ||
-                        this.myEntity.positionX + velocityX < wall.positionX - wall.width * 0.5){
-                        velocityX = -velocityX;
-                    }
-                    if(this.myEntity.positionY + velocityY > wall.positionY + wall.width * 0.5 ||
-                        this.myEntity.positionY + velocityY < wall.positionY - wall.width * 0.5){
-                        velocityY = -velocityY;
-                    }
-
-                    this.myEntity.positionX += velocityX;
-                    this.myEntity.positionY += velocityY;
-
-                    //pushes away, to not stick.
-                    let normal = {
-                        x: (this.myEntity.positionX - (wall.width / 2)),
-                        y: (this.myEntity.positionY - (wall.height / 2))
-                    };
-                    
-                    this.myEntity.initilizePush(this.myEntity.moveSpeed, normal.x, normal.y);
-                }
-            });
         }
 
         draw(context){

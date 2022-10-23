@@ -9,6 +9,8 @@ export class Entity{
         this.height = this.image.height * this.scale;
         this.positionX = this.game.width * 0.5;
         this.positionY = this.game.height * 0.5;
+        this.lastPosition = {x: 0, y:0};
+        this.velocity = {x: 0, y:0};
         this.inputDirectionX = 0;
         this.inputDirectionY = 0;
         this.inputSmoothingX = 0;
@@ -53,6 +55,11 @@ export class Entity{
 
             this.positionX += this.inputSmoothingX * this.moveSpeed;
             this.positionY += this.inputSmoothingY * this.moveSpeed;
+
+            this.velocity.x = this.positionX - this.lastPosition.x;
+            this.velocity.y = this.positionY - this.lastPosition.y;
+            this.lastPosition.x = this.positionX;
+            this.lastPosition.y = this.positionY;
         }
         else{ 
             //AI Entity stuff
