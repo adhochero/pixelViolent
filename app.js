@@ -83,23 +83,31 @@ window.addEventListener('load', function(){
             this.entities = this.entities.filter(entity => !entity.markedForDeletion);
 
             this.environment.walls.forEach(wall => {
-                //TODO: get this to work properly
                 if(this.checkCircleToRectCollision(this.myEntity, wall)){
-                    wall.color = 'grey'
+                    //this kinda works
+                    //stops penetration, but sticks on corners.
+                    let velocityX = this.myEntity.inputSmoothingX * this.myEntity.moveSpeed;
+                    let velocityY = this.myEntity.inputSmoothingY * this.myEntity.moveSpeed;
 
-                    let vCollision = {x: this.myEntity.positionX - wall.positionX, y: this.myEntity.positionX - wall.positionY};
-                    let distance = Math.sqrt(vCollision.x * vCollision.x + vCollision.y * vCollision.y);
-                    let vCollisionNorm = {x: vCollision.x / distance, y: vCollision.y / distance};
-                    let speed = this.myEntity.directionX + this.myEntity.moveSpeed * vCollisionNorm.x + this.myEntity.directionY + this.myEntity.moveSpeed * vCollisionNorm.y;
+                    if(this.myEntity.positionX + velocityX > wall.positionX + wall.width * 0.5 ||
+                        this.myEntity.positionX + velocityX < wall.positionX - wall.width * 0.5){
+                        velocityX = -velocityX;
+                    }
+                    if(this.myEntity.positionY + velocityY > wall.positionY + wall.width * 0.5 ||
+                        this.myEntity.positionY + velocityY < wall.positionY - wall.width * 0.5){
+                        velocityY = -velocityY;
+                    }
+
+                    this.myEntity.positionX += velocityX;
+                    this.myEntity.positionY += velocityY;
+
+                    //pushes away, to not stick.
+                    let normal = {
+                        x: (this.myEntity.positionX - (wall.width / 2)),
+                        y: (this.myEntity.positionY - (wall.height / 2))
+                    };
                     
-                    // this.myEntity.positionX = this.myEntity.moveSpeed * speed * vCollisionNorm.x;
-                    // this.myEntity.positionY = this.myEntity.moveSpeed * speed * vCollisionNorm.y;
-                    
-                    this.myEntity.initilizePush(speed, vCollisionNorm.x, vCollisionNorm.y)
-                }
-                else
-                {
-                    wall.color = 'black'
+                    this.myEntity.initilizePush(this.myEntity.moveSpeed, normal.x, normal.y);
                 }
             });
         }
@@ -187,6 +195,10 @@ window.addEventListener('load', function(){
 
         lerp(start, end, t){
             return (1 - t) * start + end * t;
+        }
+
+        dot(ax, ay, bx, by){
+            return ax * bx + ay * by;
         }
     }
 
